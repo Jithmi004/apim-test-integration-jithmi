@@ -108,7 +108,7 @@ sed -i "s|DB_NAME|${DB_NAME}|g" ${INFRA_JSON}
 
 export_db_params ${DB_TYPE}
 # delete if the folder is available
-rm -rf $$PRODUCT_REPOSITORY_PACK_DIR
+rm -rf $PRODUCT_REPOSITORY_PACK_DIR
 
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 log_info "Copying product pack to Repository"
@@ -117,4 +117,4 @@ cd $TESTGRID_DIR && zip -qr $PRODUCT_PACK_NAME.zip $PRODUCT_PACK_NAME
 mv $TESTGRID_DIR/$PRODUCT_PACK_NAME.zip $PRODUCT_REPOSITORY_PACK_DIR/.
 log_info "install pack into local maven Repository"
 mvn install:install-file -Dfile=$PRODUCT_REPOSITORY_PACK_DIR/$PRODUCT_PACK_NAME.zip -DgroupId=org.wso2.am -DartifactId=wso2am -Dversion=$PRODUCT_VERSION -Dpackaging=zip --file=$PRODUCT_REPOSITORY_PACK_DIR/../pom.xml 
-cd $INT_TEST_MODULE_DIR  && mvn clean install -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Ptestgrid -DskipBenchMarkTest=true -Dhttp.keepAlive=false
+cd $INT_TEST_MODULE_DIR  && mvn clean install -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Ptestgrid -pl tests-restart,tests-benchmark -am -Dhttp.keepAlive=false
